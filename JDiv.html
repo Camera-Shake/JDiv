@@ -16,8 +16,8 @@
             cursor: pointer;
         }
         #startButton { left: 20px; }
-        #pauseButton { left: 140px; }
-        #stopButton { left: 260px; }
+        #pauseButton { left: 140px; display: none; }
+        #stopButton { left: 260px; display: none; }
     </style>
 </head>
 <body>
@@ -30,7 +30,17 @@
         let audio;
         let WW, WH;
         let fft;
-        // Rest of the initialization code
+        let lookup = [];
+
+        let segmentWidths = 300;
+        let res = 100;
+        let numSegments = 60;
+        let segmentSpacing = 8;
+        let specHistory = new Array(numSegments);
+        let spectrumOffset = 0;
+        let delay = 3;
+        let delayToggle = false;
+        let doFlash = 255;
 
         function preload() {
             audio = loadSound('https://raw.githubusercontent.com/Camera-Shake/delf2/main/sols.mp3');
@@ -48,16 +58,43 @@
         }
 
         function draw() {
-            // Drawing logic
-            // Ensuring that the canvas refreshes properly
-            if (audio.isPlaying()) {
-                // Audio visualizer drawing code
+            background(0);
+
+            if (!audio.isPlaying()) {
+                return;
+            }
+
+            let spectrum = fft.analyze();
+            spectrum = spectrum.map((val, index) => val * lookup[index % lookup.length]);
+
+            for (let i = 0; i < spectrum.length; i++) {
+                let angle = map(i, 0, spectrum.length, 0, TWO_PI);
+                let amp = spectrum[i];
+                let r = map(amp, 0, 256, 20, 100);
+                let x = r * cos(angle);
+                let y = r * sin(angle);
+                stroke(i, 255, 255);
+                line(WW / 2, WH / 2, WW / 2 + x, WH / 2 + y);
             }
         }
 
-        // Removed the mousePressed function and the screen flash effect
+        function initLookup() {
+            let e = 1.1918;
+            for (let i = 0; i < res; i++) {
+                let x = (i - res / 4) * 0.35;
+                lookup[i] = (1 / sqrt(2 * PI)) * pow(e, -0.5 * pow(x, 2)) * 80;
+            }
+        }
 
-        // Event listener for start, pause, and stop buttons
+        function initHistory() {
+            for (let s = 0; s < specHistory.length; s++) {
+                specHistory[s] = new Array(res);
+                for (let x = 0; x < res; x++) {
+                    specHistory[s][x] = 0;
+                }
+            }
+        }
+
         document.getElementById('startButton').addEventListener('click', function() {
             audio.loop();
             this.style.display = 'none';
@@ -77,8 +114,6 @@
             this.style.display = 'none';
             document.getElementById('pauseButton').style.display = 'none';
         });
-
-        // Rest of the code
     </script>
 </body>
 </html>
