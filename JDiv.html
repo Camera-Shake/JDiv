@@ -13,6 +13,9 @@
 
 </head>
 <body>
+  <!-- Button to start audio -->
+  <button id="startButton">Start Audio</button>
+
    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.1/p5.js"></script>
    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.1/addons/p5.sound.min.js"></script>
    <script>
@@ -32,6 +35,17 @@ let delay = 3 ;
 let delayToggle = false;
 let doFlash = 255;
 
+
+    // Start audio on button click
+        document.getElementById('startButton').addEventListener('click', function() {
+            if (audio.isLoaded()) {
+                audio.play();
+            } else {
+                console.log('Audio not yet loaded');
+            }
+        });
+
+
 function mousePressed(){
 	doFlash = true;
 	delayToggle = !delayToggle;
@@ -45,7 +59,7 @@ function setup() {
 	createCanvas(windowWidth, windowHeight);
 	[WW, WH] = [windowWidth, windowHeight];
 	fft = new p5.FFT();
-	audio.play();
+	// audio.play();
 	noiseDetail(3,2);
 	
 	// Fix very slight issue where horizontal lines meet the FFT.
@@ -176,41 +190,3 @@ function drawLine(spec){
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
