@@ -43,6 +43,11 @@ let delay = 3;
 let delayToggle = false;
 let doFlash = 255;
 
+function mousePressed(){
+	doFlash = true;
+	delayToggle = !delayToggle;
+}
+        
 function preload(){
     audio = loadSound('https://raw.githubusercontent.com/Camera-Shake/delf2/main/sols.mp3');
 }
