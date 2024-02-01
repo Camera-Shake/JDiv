@@ -60,7 +60,7 @@ function setup() {
 }
 
 function initLookup(){
-    let e = 1.1918;
+    let e = 0.1918;
     for(let i = 0; i < res; i++){
         let x = (i - res/4) * 0.35;
         lookup[i] = (1/sqrt(2*PI)) * pow(e, -0.5 * pow(x, 2)) * 80;
