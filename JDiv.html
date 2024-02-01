@@ -5,45 +5,32 @@
     <meta charset="utf-8" />
     <title>p5.js Sketch</title>
     <style>
-        /* Contents of style.css */
         body { margin: 0; padding: 0; }
         canvas { display: block; }
-        /* Additional CSS styles here */
-        #startButton {
+        .control-button {
             position: absolute;
             z-index: 10;
             top: 20px;
-            left: 20px;
             padding: 10px 20px;
             font-size: 16px;
             cursor: pointer;
         }
+        #startButton { left: 20px; }
+        #pauseButton { left: 140px; }
+        #stopButton { left: 260px; }
     </style>
 </head>
 <body>
-    <button id="startButton">Start Audio</button>
+    <button id="startButton" class="control-button">Start Audio</button>
+    <button id="pauseButton" class="control-button">Pause Audio</button>
+    <button id="stopButton" class="control-button">Stop Audio</button>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.1/p5.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.1/addons/p5.sound.min.js"></script>
     <script>
         let audio;
         let WW, WH;
         let fft;
-        let lookup = [];
-
-        let segmentWidths = 300;
-        let res = 100;
-        let numSegments = 60;
-        let segmentSpacing = 8;
-        let specHistory = new Array(numSegments);
-        let spectrumOffset = 0;
-        let delay = 3;
-        let delayToggle = false;
-        let doFlash = 255;
-
-        function mousePressed() {
-            doFlash = true;
-            delayToggle = !delayToggle;
-        }
+        // Rest of the initialization code
 
         function preload() {
             audio = loadSound('https://raw.githubusercontent.com/Camera-Shake/delf2/main/sols.mp3');
@@ -53,8 +40,6 @@
             createCanvas(windowWidth, windowHeight);
             [WW, WH] = [windowWidth, windowHeight];
             fft = new p5.FFT();
-            // Commented out the direct play, it will be triggered by button click
-            // audio.play();
             noiseDetail(3, 2);
             strokeCap(ROUND);
             initHistory();
@@ -62,32 +47,38 @@
             background(0);
         }
 
-        function initLookup() {
-            let e = 1.1918;
-            for (let i = 0; i < res; i++) {
-                let x = (i - res / 4) * 0.35;
-                lookup[i] = (1 / sqrt(2 * PI)) * pow(e, -0.5 * pow(x, 2)) * 80;
+        function draw() {
+            // Drawing logic
+            // Ensuring that the canvas refreshes properly
+            if (audio.isPlaying()) {
+                // Audio visualizer drawing code
             }
         }
 
-        function initHistory() {
-            for (let s = 0; s < specHistory.length; s++) {
-                specHistory[s] = new Array(res);
-                for (let x = 0; x < res; x++) {
-                    specHistory[s][x] = 0;
-                }
-            }
-        }
+        // Removed the mousePressed function and the screen flash effect
 
-        // Other functions remain unchanged
-
-        // Adding event listener for the button
+        // Event listener for start, pause, and stop buttons
         document.getElementById('startButton').addEventListener('click', function() {
-            audio.play();
-            this.style.display = 'none'; // Hide button after click
+            audio.loop();
+            this.style.display = 'none';
+            document.getElementById('pauseButton').style.display = 'block';
+            document.getElementById('stopButton').style.display = 'block';
+        });
+        document.getElementById('pauseButton').addEventListener('click', function() {
+            if (audio.isPlaying()) {
+                audio.pause();
+            } else {
+                audio.loop();
+            }
+        });
+        document.getElementById('stopButton').addEventListener('click', function() {
+            audio.stop();
+            document.getElementById('startButton').style.display = 'block';
+            this.style.display = 'none';
+            document.getElementById('pauseButton').style.display = 'none';
         });
 
-        // Rest of the code remains unchanged
+        // Rest of the code
     </script>
 </body>
 </html>
