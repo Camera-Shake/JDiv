@@ -52,6 +52,15 @@ function preload(){
     audio = loadSound('https://raw.githubusercontent.com/Camera-Shake/delf2/main/sols.mp3');
 }
 
+      document.getElementById('startButton').addEventListener('click', function() {
+            if (audio.isLoaded()) {
+                audio.play();
+            } else {
+                console.log('Audio not yet loaded');
+            }
+        });
+
+	    
 function setup() {
     createCanvas(windowWidth, windowHeight);
     [WW, WH] = [windowWidth, windowHeight];
@@ -156,24 +165,7 @@ function windowResized() {
     resizeCanvas(windowWidth, windowHeight);
 }
 
-        document.getElementById('startButton').addEventListener('click', function() {
-            audio.loop();
-            this.style.display = 'none';
-            document.getElementById('pauseButton').style.display = 'block';
-            document.getElementById('stopButton').style.display = 'block';
-        });
-        document.getElementById('pauseButton').addEventListener('click', function() {
-            if (audio.isPlaying()) {
-                audio.pause();
-            } else {
-                audio.loop();
-            }
-        });
-        document.getElementById('stopButton').addEventListener('click', function() {
-            audio.stop();
-            document.getElementById('startButton').style.display = 'block';
-            this.style.display = 'none';
-            document.getElementById('pauseButton').style.display = 'none';
+      
         });
     </script>
 </body>
