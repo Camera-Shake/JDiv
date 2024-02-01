@@ -22,7 +22,8 @@
 </head>
 <body>
     <button id="startButton" class="control-button">Start Audio</button>
-
+    <button id="pauseButton" class="control-button">Pause Audio</button>
+    <button id="stopButton" class="control-button">Stop Audio</button>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.1/p5.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.1/addons/p5.sound.min.js"></script>
     <script>
@@ -42,25 +43,15 @@ let delay = 3;
 let delayToggle = false;
 let doFlash = 255;
 
-        
 function preload(){
     audio = loadSound('https://raw.githubusercontent.com/Camera-Shake/delf2/main/sols.mp3');
 }
 
-      document.getElementById('startButton').addEventListener('click', function() {
-            if (audio.isLoaded()) {
-                audio.play();
-            } else {
-                console.log('Audio not yet loaded');
-            }
-        }
-
-	    
 function setup() {
     createCanvas(windowWidth, windowHeight);
     [WW, WH] = [windowWidth, windowHeight];
     fft = new p5.FFT();
-  audio.play();
+    audio.play();
     noiseDetail(3,2);
     strokeCap(ROUND);
     initHistory();
@@ -160,7 +151,25 @@ function windowResized() {
     resizeCanvas(windowWidth, windowHeight);
 }
 
-     
+        document.getElementById('startButton').addEventListener('click', function() {
+            audio.loop();
+            this.style.display = 'none';
+            document.getElementById('pauseButton').style.display = 'block';
+            document.getElementById('stopButton').style.display = 'block';
+        });
+        document.getElementById('pauseButton').addEventListener('click', function() {
+            if (audio.isPlaying()) {
+                audio.pause();
+            } else {
+                audio.loop();
+            }
+        });
+        document.getElementById('stopButton').addEventListener('click', function() {
+            audio.stop();
+            document.getElementById('startButton').style.display = 'block';
+            this.style.display = 'none';
+            document.getElementById('pauseButton').style.display = 'none';
+        });
     </script>
 </body>
 </html>
