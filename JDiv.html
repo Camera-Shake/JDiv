@@ -82,7 +82,7 @@ function filterSpec(s){
 	let arr = [];
 	
 	// most of the spectrum doesn't have anything in it.
-	let clip = 300;
+	let clip = 700;
 	let sinWave = (sin((frameCount)/100 + spectrumOffset)+1)/2;
 	let offset = floor(map(sinWave, 0, 1, res, s.length-res-clip));
 	
@@ -139,7 +139,7 @@ function draw() {
 	strokeWeight(2);
 	stroke(255);
 
-	for(let i = 0; i < specHistory.length; i++){
+	for(let i = 0; i < specHistory.length; i=i+4){
 		push();
 		translate(0, i * segmentSpacing);
 		drawLine(specHistory[i]);
