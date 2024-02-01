@@ -82,7 +82,7 @@ function filterSpec(s){
 	let arr = [];
 	
 	// most of the spectrum doesn't have anything in it.
-	let clip = 700;
+	let clip = 300;
 	let sinWave = (sin((frameCount)/100 + spectrumOffset)+1)/2;
 	let offset = floor(map(sinWave, 0, 1, res, s.length-res-clip));
 	
